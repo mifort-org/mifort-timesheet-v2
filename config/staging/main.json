@@ -1,0 +1,13 @@
+{
+  "db": {
+    "host": "",
+    "database": "",
+    "username": "",
+    "password": "",
+    "dialect": "postgres",
+    "logging" : false
+  },
+  "server": {
+    "port": 3000
+  }
+}

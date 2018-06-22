@@ -1,0 +1,11 @@
+{
+  "jwt": {
+    "secret": "trofim"
+  },
+  "request": {
+    "limit": {
+      "min": 10,
+      "max": 50
+    }
+  }
+}
