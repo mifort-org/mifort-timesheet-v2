@@ -1,6 +1,9 @@
 {
   "jwt": {
-    "secret": "trofim"
+    "secret": "trofim",
+    "settings": {
+      "expiresIn": "14d"
+    }
   },
   "request": {
     "limit": {

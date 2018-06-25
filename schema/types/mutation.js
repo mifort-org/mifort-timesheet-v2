@@ -6,5 +6,9 @@ module.exports = `
             password: String!
             avatar: String!
         ): User
+        logIn(
+            email: String!
+            password: String!
+        ): User
     }
 `;
