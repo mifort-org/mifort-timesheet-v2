@@ -1,6 +1,7 @@
 'use strict';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const isEmpty = require('lodash/isEmpty');
 
 const config = require('../../config');
 
@@ -46,11 +47,16 @@ module.exports = (sequelize, DataTypes) => {
         return bcrypt.compare(password, this.password);
     };
 
-    User.prototype.compareRole = async function(companyId, role) {
-        const companyRole = await sequelize.models.CompanyRole.findOne({
+    User.prototype.checkCompanyConnection = async function(companyId, roles) {
+        const companyConnection = await sequelize.models.CompanyRole.findOne({
             where: { userId: this.id, companyId }
         });
-        return companyRole === role;
+
+        if (isEmpty(roles)) {
+            return !isEmpty(companyConnection);
+        }
+
+        return companyConnection && roles.includes(companyConnection.role);
     };
 
     User.prototype.generateToken = function() {

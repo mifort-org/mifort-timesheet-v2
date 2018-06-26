@@ -5,12 +5,14 @@ const { User } = require('../../data/models');
 class AuthDirective extends SchemaDirectiveVisitor {
     visitObject(type) {
         this.ensureFieldsWrapped(type);
-        type._requiredAuthRole = this.args.requires;
+        type._requiredAuthRoles = this.args.requires;
+        type._companyIdField = this.args.companyIdField;
     }
 
     visitFieldDefinition(field, details) {
         this.ensureFieldsWrapped(details.objectType);
-        field._requiredAuthRole = this.args.requires;
+        field._requiredAuthRoles = this.args.requires;
+        field._companyIdField = this.args.companyIdField;
     }
 
     ensureFieldsWrapped(objectType) {
@@ -23,17 +25,18 @@ class AuthDirective extends SchemaDirectiveVisitor {
             const field = fields[fieldName];
             const { resolve } = field;
             field.resolve = async function(...args) {
-                const requiredRole = field._requiredAuthRole || objectType._requiredAuthRole;
+                const requiredRoles = field._requiredAuthRoles || objectType._requiredAuthRoles;
+                const companyIdField = field._companyIdField || objectType._companyIdField;
                 const [, payload, context] = args;
 
                 if (context && !context.user) {
                     throw new Error('Not authorized');
                 }
 
-                if (requiredRole) {
-                    const companyId = payload.companyId;
-                    const user = User.findById(context.user.id);
-                    if (!(await user.compareRole(companyId, requiredRole))){
+                if (companyIdField) {
+                    const companyId = payload[companyIdField];
+                    const user = await User.findById(context.user.id);
+                    if (!(await user.checkCompanyConnection(companyId, requiredRoles))) {
                         throw new Error('Not authorized');
                     }
                 }
