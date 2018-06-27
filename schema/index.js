@@ -2,10 +2,12 @@ const { makeExecutableSchema, addMockFunctionsToSchema } = require('graphql-tool
 
 const typeDefs = require('./types');
 const resolvers = require('../resolvers');
+const schemaDirectives = require('./directives');
 
 const schema = makeExecutableSchema({
     typeDefs,
     resolvers,
+    schemaDirectives,
     logger: { log: console.log }
 });
 

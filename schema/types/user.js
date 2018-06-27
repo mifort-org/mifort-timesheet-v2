@@ -11,6 +11,7 @@ module.exports = `
         email: String!
         name: String!
         avatar: String!
+        token: String
         role(companyId: Int!): Role
         companies: [Company]
         projects(companyId: ID!): [Project]
