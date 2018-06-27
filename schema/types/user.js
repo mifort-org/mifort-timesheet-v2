@@ -5,6 +5,11 @@ module.exports = `
         projectManager
         employee
     }
+    
+    input Invite {
+        email: String!
+        name: String!
+    }
   
     type User {
         id: ID!
