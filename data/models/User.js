@@ -90,6 +90,11 @@ module.exports = (sequelize, DataTypes) => {
             as: 'timesheetRecords',
             foreignKey: 'userId'
         });
+
+        User.hasMany(models.ProjectAssignment, {
+            as: 'projectAssignments',
+            foreignKey: 'userId'
+        });
     };
 
     User.addScopes = models => {};
