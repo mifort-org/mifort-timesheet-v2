@@ -7,12 +7,14 @@ class AuthDirective extends SchemaDirectiveVisitor {
         this.ensureFieldsWrapped(type);
         type._requiredAuthRoles = this.args.requires;
         type._companyIdField = this.args.companyIdField;
+        type._projectIdField = this.args.projectIdField;
     }
 
     visitFieldDefinition(field, details) {
         this.ensureFieldsWrapped(details.objectType);
         field._requiredAuthRoles = this.args.requires;
         field._companyIdField = this.args.companyIdField;
+        field._projectIdField = this.args.projectIdField;
     }
 
     ensureFieldsWrapped(objectType) {
@@ -27,6 +29,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
             field.resolve = async function(...args) {
                 const requiredRoles = field._requiredAuthRoles || objectType._requiredAuthRoles;
                 const companyIdField = field._companyIdField || objectType._companyIdField;
+                const projectIdField = field._projectIdField || objectType._projectIdField;
                 const [, payload, context] = args;
 
                 if (context && !context.user) {
@@ -37,6 +40,14 @@ class AuthDirective extends SchemaDirectiveVisitor {
                     const companyId = payload[companyIdField];
                     const user = await User.findById(context.user.id);
                     if (!(await user.checkCompanyConnection(companyId, requiredRoles))) {
+                        throw new Error('Not authorized');
+                    }
+                }
+
+                if (projectIdField) {
+                    const projectId = payload[projectIdField];
+                    const user = await User.findById(context.user.id);
+                    if (!(await user.checkProjectConnection(projectId))) {
                         throw new Error('Not authorized');
                     }
                 }

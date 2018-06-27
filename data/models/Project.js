@@ -65,6 +65,11 @@ module.exports = (sequelize, DataTypes) => {
             as: 'timesheetRecords',
             foreignKey: 'projectId'
         });
+
+        Project.hasMany(models.ProjectAssignment, {
+            as: 'projectAssignments',
+            foreignKey: 'projectId'
+        });
     };
 
     Project.addScopes = models => {};

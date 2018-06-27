@@ -1,4 +1,12 @@
-const { User, Company, CompanyRole, Project, TimesheetRecord, Notification } = require('../data/models');
+const {
+    User,
+    Company,
+    CompanyRole,
+    Project,
+    ProjectAssignment,
+    TimesheetRecord,
+    Notification
+} = require('../data/models');
 
 module.exports = {
     me(_, args, { user }) {
@@ -12,6 +20,21 @@ module.exports = {
             include: {
                 model: CompanyRole,
                 as: 'companyRoles',
+                attributes: [],
+                where: {
+                    userId: user.id
+                }
+            }
+        });
+    },
+    projects(_, { companyId }, { user }) {
+        return Project.findAll({
+            where: {
+                companyId
+            },
+            include: {
+                model: ProjectAssignment,
+                as: 'projectAssignments',
                 attributes: [],
                 where: {
                     userId: user.id
