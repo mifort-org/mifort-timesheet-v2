@@ -18,6 +18,7 @@ module.exports = {
                 unique: true
             },
             description: {
+                allowNull: false,
                 type: Sequelize.TEXT
             },
             startDate: {
@@ -27,6 +28,7 @@ module.exports = {
                 type: Sequelize.DATEONLY
             },
             budget: {
+                allowNull: false,
                 type: Sequelize.FLOAT
             },
             type: {

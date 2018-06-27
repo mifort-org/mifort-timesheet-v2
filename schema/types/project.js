@@ -9,11 +9,11 @@ module.exports = `
         id: ID!
         name: String!
         code: String!
-        description: String
+        description: String!
         startDate: String
         endDate: String
         type: ProjectType!
-        budget: Float
+        budget: Float!
         users: [User]
         company: Company
         client: Client

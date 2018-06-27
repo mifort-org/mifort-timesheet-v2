@@ -19,10 +19,16 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 unique: true
             },
-            description: DataTypes.TEXT,
+            description: {
+                type: DataTypes.TEXT,
+                allowNull: false
+            },
             startDate: DataTypes.DATEONLY,
             endDate: DataTypes.DATEONLY,
-            budget: DataTypes.FLOAT,
+            budget: {
+                type: DataTypes.FLOAT,
+                allowNull: false
+            },
             type: {
                 type: DataTypes.ENUM('timeAndMaterial', 'fixedFee', 'nonBillable'),
                 allowNull: false,
