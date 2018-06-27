@@ -57,6 +57,11 @@ module.exports = (sequelize, DataTypes) => {
             as: 'notifications',
             foreignKey: 'companyId'
         });
+
+        Company.hasMany(models.CompanyRole, {
+            as: 'companyRoles',
+            foreignKey: 'companyId'
+        });
     };
 
     Company.addScopes = models => {};
