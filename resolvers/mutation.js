@@ -25,6 +25,15 @@ module.exports = {
             role: Role.OWNER
         });
 
+        // TODO: handle invites
+
         return company;
+    },
+    async createProject(_, data) {
+        const project = await Project.create(data);
+
+        // TODO: handle team
+
+        return project;
     }
 };
