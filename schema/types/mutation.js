@@ -30,5 +30,14 @@ module.exports = `
             client: ClientInput
             team: [Invite]         
         ): Project @auth(require: [owner], companyIdField: "companyId")
+        
+        createTimesheetRecord(
+            companyId: ID!
+            projectId: ID!
+            hours: Float!
+            comment: String!
+            date: String!
+            order: Int!
+        ): TimesheetRecord @auth(companyIdField: "companyId", projectIdField: "projectId")
     }
 `;

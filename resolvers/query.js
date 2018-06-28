@@ -4,6 +4,7 @@ const {
     CompanyRole,
     Project,
     ProjectAssignment,
+    Client,
     TimesheetRecord,
     Notification
 } = require('../data/models');
@@ -86,6 +87,20 @@ module.exports = {
                 }
             });
         }
+    },
+    clients(_, { companyId }) {
+        return Client.findAll({ where: { companyId } });
+    },
+    timesheetRecords(_, { companyId }, { user }) {
+        return TimesheetRecord.findAll({
+            where: {
+                companyId,
+                userId: user.id
+            }
+        });
+    },
+    notifications(_, { companyId }) {
+        return Notification.findAll({ where: { companyId } });
     },
     company(_, { id }) {
         return Company.findById(id);
