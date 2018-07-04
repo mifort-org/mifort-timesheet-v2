@@ -14,9 +14,9 @@ module.exports = `
         endDate: String
         type: ProjectType!
         budget: Float!
-        users: [User]
-        company: Company
-        client: Client
+        users: [User] @auth(requires: [owner, resourceManager, projectManager], searchPath: root, companyIdField: "companyId")
+        company: Company @auth(requires: [owner, resourceManager, projectManager], searchPath: root, companyIdField: "companyId")
+        client: Client @auth(requires: [owner, resourceManager, projectManager], searchPath: root, companyIdField: "companyId")
         timesheetRecords: [TimesheetRecord]
     }
 `;

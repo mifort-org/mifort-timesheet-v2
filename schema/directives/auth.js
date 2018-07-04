@@ -8,6 +8,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
         type._requiredAuthRoles = this.args.requires;
         type._companyIdField = this.args.companyIdField;
         type._projectIdField = this.args.projectIdField;
+        type._searchPath = this.args.searchPath;
     }
 
     visitFieldDefinition(field, details) {
@@ -15,6 +16,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
         field._requiredAuthRoles = this.args.requires;
         field._companyIdField = this.args.companyIdField;
         field._projectIdField = this.args.projectIdField;
+        field._searchPath = this.args.searchPath;
     }
 
     ensureFieldsWrapped(objectType) {
@@ -30,14 +32,19 @@ class AuthDirective extends SchemaDirectiveVisitor {
                 const requiredRoles = field._requiredAuthRoles || objectType._requiredAuthRoles;
                 const companyIdField = field._companyIdField || objectType._companyIdField;
                 const projectIdField = field._projectIdField || objectType._projectIdField;
-                const [, payload, context] = args;
+                const searchPath = field._searchPath || objectType._searchPath;
+                const [root, payload, context] = args;
+                const source = {
+                    payload,
+                    root
+                };
 
                 if (context && !context.user) {
                     throw new Error('Not authorized');
                 }
 
                 if (companyIdField) {
-                    const companyId = payload[companyIdField];
+                    const companyId = source[searchPath][companyIdField];
                     const user = await User.findById(context.user.id);
                     if (!(await user.checkCompanyConnection(companyId, requiredRoles))) {
                         throw new Error('Not authorized');
@@ -45,7 +52,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
                 }
 
                 if (projectIdField) {
-                    const projectId = payload[projectIdField];
+                    const projectId = source[searchPath][projectIdField];
                     const user = await User.findById(context.user.id);
                     if (!(await user.checkProjectConnection(projectId))) {
                         throw new Error('Not authorized');
