@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('express-jwt');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
@@ -9,6 +10,8 @@ const config = require('./config');
 const schema = require('./schema');
 
 const app = express();
+
+app.use(cors());
 
 app.use(
     '/graphql',
