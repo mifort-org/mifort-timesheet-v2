@@ -9,5 +9,5 @@ module.exports = `
         projectIdField: String
         searchPath: SearchPath = payload
         requires: [Role]
-    ) on OBJECT | FIELD_DEFINITION
+    ) on FIELD_DEFINITION
 `;
