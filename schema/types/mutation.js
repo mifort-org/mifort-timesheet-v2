@@ -28,7 +28,7 @@ module.exports = `
             type: ProjectType!
             startDate: String
             endDate: String
-            client: ClientInput
+            client: ClientInput!
             team: [Invite]         
         ): Project @auth(require: [owner], companyIdField: "companyId")
         
