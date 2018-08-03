@@ -64,7 +64,7 @@ module.exports = {
     },
     async createProject(_, data) {
         return sequelize.transaction(async transaction => {
-            const client = await Client.findOrCreate({ where: data.client, transaction });
+            const [client] = await Client.findOrCreate({ where: data.client, transaction });
 
             data.clientId = client.id;
 
