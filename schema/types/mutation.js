@@ -20,6 +20,7 @@ module.exports = `
         ): Company @auth
         
         createProject(
+            companyId: ID!
             name: String!
             code: String!
             description: String!
