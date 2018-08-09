@@ -16,8 +16,8 @@
     "re-build": "npm run clean && npm install",
     "migrate-up": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo:all",
-    "seed-up": "sequelize db:seed:all",
-    "seed-down": "sequelize db:seed:undo:all"
+    "seed-up": "./node_modules/.bin/sequelize db:seed:all",
+    "seed-down": "./node_modules/.bin/sequelize db:seed:undo:all"
   },
   "repository": {},
   "dependencies": {
@@ -36,6 +36,7 @@
     "pg": "^7.4.1",
     "pg-native": "^2.2.0",
     "sequelize": "^4.37.8",
+    "sequelize-cli": "^4.0.0",
     "validator": "^9.4.1"
   },
   "devDependencies": {
