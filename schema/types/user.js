@@ -17,7 +17,7 @@ module.exports = `
         name: String!
         avatar: String!
         token: String
-        role(companyId: Int!): Role
+        role(companyId: ID!): Role
         companies: [Company]
         projects(companyId: ID!): [Project]
         timesheetRecords(companyId: ID!): [TimesheetRecord]
