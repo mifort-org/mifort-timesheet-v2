@@ -40,5 +40,9 @@ module.exports = `
             date: String!
             order: Int!
         ): TimesheetRecord @auth(companyIdField: "companyId", projectIdField: "projectId")
+        
+        resetPassword(
+            email: String!
+        ): User
     }
 `;

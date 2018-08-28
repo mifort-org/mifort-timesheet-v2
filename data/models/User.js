@@ -35,6 +35,12 @@ module.exports = (sequelize, DataTypes) => {
             avatar: {
                 type: DataTypes.TEXT,
                 allowNull: false
+            },
+            token: {
+                type: DataTypes.TEXT
+            },
+            tokenExpiresAdd: {
+                type: DataTypes.INTEGER
             }
         },
         {

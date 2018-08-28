@@ -31,6 +31,12 @@ module.exports = {
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE
+            },
+            token: {
+                type: Sequelize.TEXT
+            },
+            tokenExpiresAdd: {
+                type: Sequelize.INTEGER
             }
         });
     },
