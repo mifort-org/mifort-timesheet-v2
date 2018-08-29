@@ -44,5 +44,9 @@ module.exports = `
         resetPassword(
             email: String!
         ): User
+        
+        restorePassword(
+            email: String!
+        ): User
     }
 `;

@@ -99,6 +99,7 @@ module.exports = {
             return project;
         });
     },
+
     createTimesheetRecord(_, data, { user }) {
         data.userId = user.id;
         return TimesheetRecord.create(data);
@@ -106,30 +107,42 @@ module.exports = {
 
     async resetPassword(_, { email }) {
         let user = await User.findOne({ where: { email } });
-        if (user) {
-            const token = crypto.randomBytes(64).toString('hex');
-            await User.update({
-                where: {
-                    token,
-                    tokenExpiresAdd: Date.now() + TOKEN_EXPIRSE
-                }
-            });
-            let mailOptions = {
-                from: config.mailer.address,
-                to: user.email,
-                subject: 'Password reset',
-                text: `Сlick to reset your password: ${config.url}+/restore/password?token=+${token}`
-            };
-            mailer.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log(error);
-                    return new Error(error);
-                }
-                console.log('Message sent: %s', info.messageId);
-                console.log('Preview URL: %s', mailer.getTestMessageUrl(info));
-                return 'Please, check your email';
-            });
+        if (!user) {
+            return new Error('User not found');
         }
-        return new Error('User not found');
+        const token = crypto.randomBytes(64).toString('hex');
+        await User.update({
+            where: {
+                token,
+                tokenExpiresAdd: Date.now() + TOKEN_EXPIRSE
+            }
+        });
+        let mailOptions = {
+            from: config.mailer.address,
+            to: user.email,
+            subject: 'Password reset',
+            text: `Сlick to reset your password: ${config.url}/restore/password?token=${token}`
+        };
+        mailer.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                return new Error(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            console.log('Preview URL: %s', mailer.getTestMessageUrl(info));
+            return 'Please, check your email';
+        });
+    },
+
+    async restorePassword(_, { token, newPassword }) {
+        let user = await User.findOne({ where: { token } });
+        if (!user) {
+            return new Error('User not found');
+        }
+
+        if (Date.now() > user.tokenExpiresAdd) {
+            return new Error('This token has expired');
+        }
+        return User.update({ where: { password: newPassword } });
     }
 };
