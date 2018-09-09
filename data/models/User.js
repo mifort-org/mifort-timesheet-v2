@@ -95,6 +95,12 @@ module.exports = (sequelize, DataTypes) => {
             as: 'projectAssignments',
             foreignKey: 'userId'
         });
+
+        User.hasMany(models.Invitation, {
+            as: 'invitations',
+            foreignKey: 'email',
+            sourceKey: 'email'
+        });
     };
 
     User.addScopes = models => {};

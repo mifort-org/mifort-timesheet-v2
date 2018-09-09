@@ -62,6 +62,11 @@ module.exports = (sequelize, DataTypes) => {
             as: 'companyRoles',
             foreignKey: 'companyId'
         });
+
+        Company.hasMany(models.Invitation, {
+            as: 'invitations',
+            foreignKey: 'companyId'
+        });
     };
 
     Company.addScopes = models => {};
