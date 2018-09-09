@@ -40,5 +40,18 @@ module.exports = `
             date: String!
             order: Int!
         ): TimesheetRecord @auth(companyIdField: "companyId", projectIdField: "projectId")
+        
+        sendInvitation(
+            email: String!
+            companyId: ID!
+        ): Invitation @auth(require: [owner, resourceManager], companyIdField: "companyId")
+        
+        acceptInvitation(
+            id: ID!
+        ): Invitation @auth
+        
+        declineInvitation(
+            id: ID!
+        ): Invitation @auth
     }
 `;

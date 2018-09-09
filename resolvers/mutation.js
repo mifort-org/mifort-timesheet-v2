@@ -8,6 +8,7 @@ const {
     ProjectAssignment,
     Client,
     TimesheetRecord,
+    Invitation,
     sequelize
 } = require('../data/models');
 const Role = require('../data/constants/roles');
@@ -98,5 +99,36 @@ module.exports = {
     createTimesheetRecord(_, data, { user }) {
         data.userId = user.id;
         return TimesheetRecord.create(data);
+    },
+    async sendInvitation(_, data) {
+        const invitation = await Invitation.create(data);
+
+        // TODO: send invite via email
+
+        return invitation;
+    },
+    async acceptInvitation(_, data, { user }) {
+        const invitation = await Invitation.findById(data.id);
+
+        if (user.email !== invitation.email) {
+            throw new Error('Not authorized');
+        }
+
+        invitation.update({ status: 'accepted' });
+        await CompanyRole.create({
+            userId: user.id,
+            companyId: invitation.companyId,
+            role: invitation.role
+        });
+        return invitation;
+    },
+    async declineInvitation(_, data, { user }) {
+        const invitation = await Invitation.findById(data.id);
+
+        if (user.email !== invitation.email) {
+            throw new Error('Not authorized');
+        }
+
+        return invitation.update({ status: 'declined' });
     }
 };

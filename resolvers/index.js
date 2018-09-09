@@ -3,6 +3,7 @@ const Mutation = require('./mutation');
 const BackupOptions = require('./backupOptions');
 const Client = require('./client');
 const Company = require('./company');
+const Invitation = require('./invitation');
 const Notification = require('./notification');
 const Project = require('./project');
 const TimesheetRecord = require('./timesheetRecord');
@@ -14,6 +15,7 @@ module.exports = {
     BackupOptions,
     Client,
     Company,
+    Invitation,
     Notification,
     Project,
     TimesheetRecord,

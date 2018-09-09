@@ -21,5 +21,8 @@ module.exports = {
     },
     timesheetRecords(company, payload, { user }) {
         return company.getTimesheetRecords({ where: { userId: user.id } });
+    },
+    invitations(company) {
+        return company.getInvitations();
     }
 };

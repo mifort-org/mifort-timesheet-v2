@@ -14,5 +14,6 @@ module.exports = `
         backupOptions: BackupOptions @auth(requires: [owner], searchPath: root, companyIdField: "id")
         clients: [Client] @auth(requires: [owner, resourceManager, projectManager], searchPath: root, companyIdField: "id")
         timesheetRecords: [TimesheetRecord] @auth(searchPath: root, companyIdField: "id")
+        invitations: [Invitation]
     }
 `;

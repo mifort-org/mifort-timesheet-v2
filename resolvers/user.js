@@ -10,5 +10,8 @@ module.exports = {
     },
     notifications(user) {
         return user.getNotifications();
+    },
+    invitations(user) {
+        return user.getInvitations();
     }
 };

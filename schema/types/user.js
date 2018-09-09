@@ -22,5 +22,6 @@ module.exports = `
         projects(companyId: ID!): [Project]
         timesheetRecords(companyId: ID!): [TimesheetRecord]
         notifications(companyId: ID!): [Notification]
+        invitations: [Invitation]
     }
 `;
