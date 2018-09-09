@@ -15,7 +15,8 @@ const sequelize = new Sequelize(
     config.get('db:password'),
     {
         host: config.get('db:host'),
-        dialect: 'postgres'
+        dialect: 'postgres',
+        logging: config.get('NODE_ENV') !== 'production'
     }
 );
 
@@ -35,6 +36,8 @@ Object.keys(db).forEach(modelName => {
         db[modelName].addScopes(db);
     }
 });
+
+sequelize.sync();
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

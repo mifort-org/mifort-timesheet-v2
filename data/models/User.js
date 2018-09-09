@@ -59,6 +59,14 @@ module.exports = (sequelize, DataTypes) => {
         return companyConnection && roles.includes(companyConnection.role);
     };
 
+    User.prototype.checkProjectConnection = async function(projectId) {
+        const projectConnection = await sequelize.models.ProjectAssignment.findOne({
+            where: { userId: this.id, projectId }
+        });
+
+        return !isEmpty(projectConnection);
+    };
+
     User.prototype.generateToken = function() {
         return jwt.sign({ id: this.id }, config.get('jwt:secret'), config.get('jwt:options'));
     };
@@ -80,6 +88,11 @@ module.exports = (sequelize, DataTypes) => {
 
         User.hasMany(models.TimesheetRecord, {
             as: 'timesheetRecords',
+            foreignKey: 'userId'
+        });
+
+        User.hasMany(models.ProjectAssignment, {
+            as: 'projectAssignments',
             foreignKey: 'userId'
         });
     };

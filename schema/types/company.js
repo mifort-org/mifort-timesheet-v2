@@ -9,10 +9,10 @@ module.exports = `
         name: String!
         logo: String!
         startOfWeekDay: WeekDay!
-        users: [User]
-        projects: [Project]
-        backupOptions: BackupOptions
-        clients: [Client]
-        timesheetRecords: [TimesheetRecord]
+        users: [User] @auth(requires: [owner, resourceManager, projectManager], searchPath: root, companyIdField: "id")
+        projects: [Project] @auth(searchPath: root, companyIdField: "id")
+        backupOptions: BackupOptions @auth(requires: [owner], searchPath: root, companyIdField: "id")
+        clients: [Client] @auth(requires: [owner, resourceManager, projectManager], searchPath: root, companyIdField: "id")
+        timesheetRecords: [TimesheetRecord] @auth(searchPath: root, companyIdField: "id")
     }
 `;
