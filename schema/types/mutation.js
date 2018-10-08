@@ -44,6 +44,7 @@ module.exports = `
         sendInvitation(
             email: String!
             companyId: ID!
+            role: Role!
         ): Invitation @auth(require: [owner, resourceManager], companyIdField: "companyId")
         
         acceptInvitation(
