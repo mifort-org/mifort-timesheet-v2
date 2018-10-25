@@ -43,7 +43,7 @@ module.exports = `
         
         resetPassword(
             email: String!
-        ): User
+        ): String
         
         restorePassword(
             token: String!
