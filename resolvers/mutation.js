@@ -1,6 +1,6 @@
 const { isEmpty } = require('lodash');
 const crypto = require('crypto');
-const mailer = require('../lib/mailer');
+const sendEmail = require('../lib/mailer');
 const config = require('../config');
 const TOKEN_EXPIRSE = 1000 * 60 * 60;
 
@@ -111,27 +111,32 @@ module.exports = {
             return new Error('User not found');
         }
         const token = crypto.randomBytes(64).toString('hex');
-        await User.update({
-            where: {
+        await User.update(
+            {
                 token,
                 tokenExpiresAdd: Date.now() + TOKEN_EXPIRSE
+            },
+            {
+                where: {
+                    email
+                }
             }
-        });
+        );
         let mailOptions = {
-            from: config.mailer.address,
+            from: config.mailer.address, // todo add config mailer
             to: user.email,
             subject: 'Password reset',
-            text: `Сlick to reset your password: ${config.url}/restore/password?token=${token}`
+            text: `Сlick to reset your password: ${config.url}/restore/password?token=${token}` // todo add config url
         };
-        mailer.sendMail(mailOptions, (error, info) => {
-            if (error) {
+        return sendEmail(mailOptions)
+            .then(info => {
+                console.log('Message sent: %s', info.messageId);
+                return 'Please, check your email';
+            })
+            .catch(error => {
                 console.log(error);
                 return new Error(error);
-            }
-            console.log('Message sent: %s', info.messageId);
-            console.log('Preview URL: %s', mailer.getTestMessageUrl(info));
-            return 'Please, check your email';
-        });
+            });
     },
 
     async restorePassword(_, { token, newPassword }) {
@@ -143,6 +148,8 @@ module.exports = {
         if (Date.now() > user.tokenExpiresAdd) {
             return new Error('This token has expired');
         }
-        return User.update({ where: { password: newPassword } });
+        return User.update({ password: newPassword }, { where: { token } }).then(() => {
+            return User.findOne({ where: { token } });
+        });
     }
 };

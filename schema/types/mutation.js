@@ -46,7 +46,8 @@ module.exports = `
         ): User
         
         restorePassword(
-            email: String!
+            token: String!
+            newPassword: String!
         ): User
     }
 `;
