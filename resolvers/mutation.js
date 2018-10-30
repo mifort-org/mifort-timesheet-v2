@@ -2,7 +2,7 @@ const { isEmpty } = require('lodash');
 const crypto = require('crypto');
 const sendEmail = require('../lib/mailer');
 const config = require('../config');
-const TOKEN_EXPIRSE = 1000 * 60 * 60;
+const TOKEN_EXPIRES = config.get('constants:TOKEN_EXPIRES');
 
 const {
     User,
@@ -114,7 +114,7 @@ module.exports = {
         await User.update(
             {
                 token,
-                tokenExpiresAdd: Date.now() + TOKEN_EXPIRSE
+                tokenExpiresAdd: Date.now() + TOKEN_EXPIRES
             },
             {
                 where: {
@@ -122,9 +122,13 @@ module.exports = {
                 }
             }
         );
+        return this.sendResetEmail(user.email, token);
+    },
+
+    async sendResetEmail(userEmail, token) {
         let mailOptions = {
             from: config.mailer.address, // todo add config mailer
-            to: user.email,
+            to: userEmail,
             subject: 'Password reset',
             text: `Сlick to reset your password: ${config.url}/restore/password?token=${token}` // todo add config url
         };
@@ -138,7 +142,6 @@ module.exports = {
                 return new Error(error);
             });
     },
-
     async restorePassword(_, { token, newPassword }) {
         let user = await User.findOne({ where: { token } });
         if (!user) {
