@@ -122,26 +122,9 @@ module.exports = {
                 }
             }
         );
-        return this.sendResetEmail(user.email, token);
+        return sendEmail.sendResetEmail(user.email, token);
     },
 
-    async sendResetEmail(userEmail, token) {
-        let mailOptions = {
-            from: config.mailer.address, // todo add config mailer
-            to: userEmail,
-            subject: 'Password reset',
-            text: `Сlick to reset your password: ${config.url}/restore/password?token=${token}` // todo add config url
-        };
-        return sendEmail(mailOptions)
-            .then(info => {
-                console.log('Message sent: %s', info.messageId);
-                return 'Please, check your email';
-            })
-            .catch(error => {
-                console.log(error);
-                return new Error(error);
-            });
-    },
     async restorePassword(_, { token, newPassword }) {
         let user = await User.findOne({ where: { token } });
         if (!user) {
