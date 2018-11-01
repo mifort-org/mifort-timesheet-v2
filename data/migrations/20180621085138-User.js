@@ -35,7 +35,7 @@ module.exports = {
             token: {
                 type: Sequelize.TEXT
             },
-            tokenExpiresAdd: {
+            tokenExpiresAt: {
                 type: Sequelize.INTEGER
             }
         });
