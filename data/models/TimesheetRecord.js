@@ -65,6 +65,13 @@ module.exports = (sequelize, DataTypes) => {
             as: 'project',
             foreignKey: 'projectId'
         });
+
+        TimesheetRecord.belongsToMany(models.Company, {
+            as: 'companies',
+            through: 'CompanyRole',
+            foreignKey: 'timesheetRecordId',
+            otherKey: 'companyId'
+        });
     };
 
     TimesheetRecord.addScopes = models => {};

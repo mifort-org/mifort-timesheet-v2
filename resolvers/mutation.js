@@ -41,7 +41,6 @@ module.exports = {
                 },
                 { transaction }
             );
-            console.log('LOH')
             for (let owner of data.owners) {
                 const user = await User.findOne({ where: { email: owner.email } });
 
