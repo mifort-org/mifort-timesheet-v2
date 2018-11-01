@@ -20,7 +20,9 @@ module.exports = {
     },
     async logIn(_, { email, password }) {
         const user = await User.findOne({ where: { email } });
-
+        if (!user) {
+            return new Error('User not found');
+        }
         if (!(await user.comparePassword(password))) {
             return new Error('Invalid credentials');
         }
