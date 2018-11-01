@@ -32,7 +32,7 @@ module.exports = {
     },
     async createCompany(_, data, { user }) {
         return sequelize.transaction(async transaction => {
-            const company = await Company.create(data);
+            const company = await Company.create(data, { transaction });
             await CompanyRole.create(
                 {
                     userId: user.id,
@@ -41,7 +41,7 @@ module.exports = {
                 },
                 { transaction }
             );
-
+            console.log('LOH')
             for (let owner of data.owners) {
                 const user = await User.findOne({ where: { email: owner.email } });
 
