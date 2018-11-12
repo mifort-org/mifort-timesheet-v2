@@ -99,5 +99,24 @@ module.exports = {
     createTimesheetRecord(_, data, { user }) {
         data.userId = user.id;
         return TimesheetRecord.create(data);
+    },
+    async updateTimesheetRecord(_, data, { user }) {
+        await TimesheetRecord.update(data, {
+            where: {
+                id: data.timesheetRecordId
+            }
+        });
+        return TimesheetRecord.findOne({
+            where: {
+                id: data.timesheetRecordId
+            }
+        });
+    },
+    async deleteTimesheetRecord(_, data, { user }) {
+        return TimesheetRecord.destroy({
+            where: {
+                id: data.timesheetRecordId
+            }
+        });
     }
 };
