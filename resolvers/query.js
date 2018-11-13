@@ -32,7 +32,6 @@ const toCSVAndUploadToS3 = async function(records) {
     try {
         const csv = json2csv(records, opts);
         const result = await S3.uploadToS3(csv);
-        console.log(result)
         return result.Location;
     } catch (err) {
         console.error(err);
