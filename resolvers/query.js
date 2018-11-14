@@ -8,8 +8,35 @@ const {
     TimesheetRecord,
     Notification
 } = require('../data/models');
+
 const Role = require('../data/constants/roles');
 const { Op } = require('sequelize');
+const lodash = require('lodash');
+const json2csv = require('json2csv').parse;
+const S3 = require('../lib/S3');
+
+const preferToCVS = function(records) {
+    return records.map(val => {
+        return lodash.mapKeys(val, (value, key) => {
+            if (key === 'user.name') return 'employee name';
+            if (key === 'project.name') return 'project name';
+            return key;
+        });
+    });
+};
+
+const toCSVAndUploadToS3 = async function(records) {
+    const fields = ['date', 'employee name', 'project name', 'hours', 'comment'];
+    const opts = { fields };
+
+    try {
+        const csv = json2csv(records, opts);
+        const result = await S3.uploadToS3(csv);
+        return result.Location;
+    } catch (err) {
+        console.error(err);
+    }
+};
 
 module.exports = {
     me(_, args, { user }) {
@@ -110,5 +137,36 @@ module.exports = {
     },
     user(_, { id }) {
         return User.findById(id);
+    },
+    async timeSheetRecordsToCSV(_, { userId, projectId, startDate, endDate }) {
+        const records = await TimesheetRecord.findAll({
+            raw: true,
+            where: {
+                userId: userId,
+                projectId: projectId,
+                date: {
+                    [Op.between]: [startDate, endDate]
+                }
+            },
+            include: [
+                {
+                    model: Project,
+                    as: 'project',
+                    attributes: ['name'],
+                    where: {
+                        id: projectId
+                    }
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['name'],
+                    where: {
+                        id: userId
+                    }
+                }
+            ]
+        });
+        return toCSVAndUploadToS3(await preferToCVS(records));
     }
 };

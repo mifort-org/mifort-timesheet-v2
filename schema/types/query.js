@@ -10,5 +10,6 @@ module.exports = `
         company(id: ID!): Company @auth(companyIdField: "id")
         project(id: ID!): Project @auth(projectIdField: "id")
         user(id: ID!): User
+        timeSheetRecordsToCSV(userId: ID!, projectId: ID!, startDate: String!, endDate: String!): String  @auth(userField: "userId", projectIdField: "projectId")
     }
 `;
