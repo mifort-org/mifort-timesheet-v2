@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
             token: {
                 type: DataTypes.TEXT
             },
-            tokenExpiresAdd: {
+            tokenExpiresAt: {
                 type: DataTypes.BIGINT
             }
         },
