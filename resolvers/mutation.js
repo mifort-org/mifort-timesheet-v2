@@ -101,16 +101,12 @@ module.exports = {
         return TimesheetRecord.create(data);
     },
     async updateTimesheetRecord(_, data, { user }) {
-        await TimesheetRecord.update(data, {
-            where: {
-                id: data.timesheetRecordId
-            }
-        });
-        return TimesheetRecord.findOne({
-            where: {
-                id: data.timesheetRecordId
-            }
-        });
+      const record = await TimesheetRecord.findOne({
+        where: {
+          id: data.timesheetRecordId
+        }
+      });
+      return record.update(data);
     },
     async deleteTimesheetRecord(_, data, { user }) {
         return TimesheetRecord.destroy({

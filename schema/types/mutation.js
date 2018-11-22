@@ -47,10 +47,10 @@ module.exports = `
             hours: Float!
             comment: String!
             order: Int!
-        ): TimesheetRecord @auth(companyIdField: "companyId", projectIdField: "projectId")
+        ): TimesheetRecord @auth(projectIdField: "projectId")
         
          deleteTimesheetRecord(
             timesheetRecordId: ID!
-        ): String
+        ): String @auth
     }
 `;
