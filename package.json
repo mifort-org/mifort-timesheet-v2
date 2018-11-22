@@ -22,6 +22,7 @@
   "repository": {},
   "dependencies": {
     "apollo-server-express": "^1.3.6",
+    "aws-sdk": "^2.345.0",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
@@ -32,6 +33,8 @@
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
     "nconf": "^0.10.0",
+    "nodemailer": "^4.6.8",
+    "nodemailer-promise": "^2.0.0",
     "passport-jwt": "^3.0.1",
     "pg": "^7.4.1",
     "pg-native": "^2.2.0",

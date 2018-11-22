@@ -1,4 +1,8 @@
 const { isEmpty } = require('lodash');
+const crypto = require('crypto');
+const sendEmail = require('../lib/mailer');
+const config = require('../config');
+const TOKEN_EXPIRES = config.get('constants:TOKEN_EXPIRES');
 
 const {
     User,
@@ -95,8 +99,43 @@ module.exports = {
             return project;
         });
     },
+
     createTimesheetRecord(_, data, { user }) {
         data.userId = user.id;
         return TimesheetRecord.create(data);
+    },
+
+    async resetPassword(_, { email }) {
+        let user = await User.findOne({ where: { email } });
+        if (!user) {
+            return new Error('User not found');
+        }
+        const token = crypto.randomBytes(64).toString('hex');
+        await User.update(
+            {
+                token,
+                tokenExpiresAdd: Date.now() + TOKEN_EXPIRES
+            },
+            {
+                where: {
+                    email
+                }
+            }
+        );
+        return sendEmail.sendResetEmail(user.email, token);
+    },
+
+    async restorePassword(_, { token, newPassword }) {
+        let user = await User.findOne({ where: { token } });
+        if (!user) {
+            return new Error('User not found');
+        }
+
+        if (Date.now() > user.tokenExpiresAdd) {
+            return new Error('This token has expired');
+        }
+        return User.update({ password: newPassword }, { where: { token } }).then(() => {
+            return User.findOne({ where: { token } });
+        });
     }
 };
