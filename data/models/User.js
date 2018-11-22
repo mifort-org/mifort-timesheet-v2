@@ -105,5 +105,5 @@ module.exports = (sequelize, DataTypes) => {
 
     User.addScopes = models => {};
 
-    return User;
+    return User; //todo
 };
