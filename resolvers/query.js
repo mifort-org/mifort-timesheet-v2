@@ -153,20 +153,14 @@ module.exports = {
                     model: Project,
                     as: 'project',
                     attributes: ['name'],
-                    where: {
-                        id: projectId
-                    }
                 },
                 {
                     model: User,
                     as: 'user',
                     attributes: ['name'],
-                    where: {
-                        id: userId
-                    }
                 }
             ]
         });
-        return toCSVAndUploadToS3(await preferToCVS(records));
+        return toCSVAndUploadToS3(preferToCVS(records));
     }
 };
