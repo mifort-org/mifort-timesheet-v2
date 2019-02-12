@@ -10,8 +10,8 @@
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "prod": "pm2-runtime start index.js --name=timesheet",
-    "re-start": "pm2-runtime restart timesheet",
+    "prod": "pm2 start index.js --name=timesheet",
+    "re-start": "pm2 restart timesheet",
     "clean": "rm -rf node_modules",
     "re-build": "npm run clean && npm install",
     "migrate-up": "sequelize db:migrate",
