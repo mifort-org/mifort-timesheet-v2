@@ -20,7 +20,9 @@ module.exports = {
     },
     async logIn(_, { email, password }) {
         const user = await User.findOne({ where: { email } });
-
+        if (!user) {
+            return new Error('User not found');
+        }
         if (!(await user.comparePassword(password))) {
             return new Error('Invalid credentials');
         }
@@ -30,7 +32,7 @@ module.exports = {
     },
     async createCompany(_, data, { user }) {
         return sequelize.transaction(async transaction => {
-            const company = await Company.create(data);
+            const company = await Company.create(data, { transaction });
             await CompanyRole.create(
                 {
                     userId: user.id,
@@ -39,7 +41,6 @@ module.exports = {
                 },
                 { transaction }
             );
-
             for (let owner of data.owners) {
                 const user = await User.findOne({ where: { email: owner.email } });
 
@@ -98,5 +99,20 @@ module.exports = {
     createTimesheetRecord(_, data, { user }) {
         data.userId = user.id;
         return TimesheetRecord.create(data);
+    },
+    async updateTimesheetRecord(_, data, { user }) {
+      const record = await TimesheetRecord.findOne({
+        where: {
+          id: data.timesheetRecordId
+        }
+      });
+      return record.update(data);
+    },
+    async deleteTimesheetRecord(_, data, { user }) {
+        return TimesheetRecord.destroy({
+            where: {
+                id: data.timesheetRecordId
+            }
+        });
     }
 };
