@@ -10,7 +10,7 @@
   },
   "scripts": {
     "dev": "nodemon index.js",
-    "prod": "pm2 start index.js --name=timesheet",
+    "prod": "export NODE_ENV=production && pm2 start index.js --name=timesheet",
     "re-start": "pm2 restart timesheet",
     "clean": "rm -rf node_modules",
     "re-build": "npm run clean && npm install",
